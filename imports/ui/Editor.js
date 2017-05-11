@@ -2,34 +2,63 @@ import React from 'react';
 import {createContainer} from 'meteor/react-meteor-data';
 import {Session} from 'meteor/session';
 import {Meteor} from 'meteor/meteor';
+import {browserHistory} from 'react-router';
 
 import {Notes} from '../api/notes';
 
 export class Editor extends React.Component {
 
+    constructor(props) {
+        super(props);
+
+        this.state = {
+            title: '',
+            body: ''
+        };
+    }
+
     handleTitleChange(event) {
-        this.props.call('notes.update', this.props.note._id, {
-            title: event.target.value
-        });
+        const title = event.target.value;
+
+        this.setState({title});
+        this.props.call('notes.update', this.props.note._id, {title});
     }
 
     handleBodyChange(event) {
-        this.props.call('notes.update', this.props.note._id, {
-            body: event.target.value
-        });
+        const body = event.target.value;
+
+        this.setState({body});
+        this.props.call('notes.update', this.props.note._id, {body});
+    }
+
+    handleRemoval() {
+        this.props.call('notes.remove', this.props.note._id);
+        this.props.browserHistory.push('/dashboard');
+    }
+
+    componentDidUpdate(prevProps, prevState) {
+        const currentNoteId = this.props.note ? this.props.note._id : undefined;
+        const prevNoteId = prevProps.note ? prevProps.note._id : undefined;
+
+        if (currentNoteId && currentNoteId !== prevNoteId) {
+            this.setState({
+                title: this.props.note.title,
+                body: this.props.note.body
+            });
+        }
     }
 
     render() {
         if (this.props.note) {
             return (
                 <div>
-                    <input value={this.props.note.title}
+                    <input value={this.state.title}
                            placeholder="Untitled note"
                            onChange={this.handleTitleChange.bind(this)}/>
-                    <textarea value={this.props.note.body}
+                    <textarea value={this.state.body}
                               placeholder="Your note here"
                               onChange={this.handleBodyChange.bind(this)}></textarea>
-                    <button>Delete Note</button>
+                    <button onClick={this.handleRemoval.bind(this)}>Delete Note</button>
                 </div>
             );
         } else {
@@ -44,7 +73,9 @@ export class Editor extends React.Component {
 
 Editor.propTypes = {
     note: React.PropTypes.object,
-    selectedNoteId: React.PropTypes.string
+    selectedNoteId: React.PropTypes.string,
+    call: React.PropTypes.func.isRequired,
+    browserHistory: React.PropTypes.object.isRequired
 };
 
 export default createContainer(() => {
@@ -53,6 +84,7 @@ export default createContainer(() => {
     return {
         selectedNoteId,
         note: Notes.findOne(selectedNoteId),
-        call: Meteor.call
+        call: Meteor.call,
+        browserHistory
     };
 }, Editor);
