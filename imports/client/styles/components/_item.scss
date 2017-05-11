@@ -3,22 +3,48 @@
   border: 1px solid $grey;
   width: 100%;
   overflow-y: scroll;
+
+  &__header {
+    display: flex;
+    flex-direction: column;
+    padding: $space;
+  }
+}
+
+.empty-item {
+  font-style: italic;
+  padding: $space;
+  text-align: center;
 }
 
 .item {
-  background-color: $item-bg;
-  border: 1px solid $item-border;
-  margin-bottom: $space;
+  cursor: pointer;
   padding: $space;
+  border-left: $item-border-width solid transparent;
+  transition: background-color .3s ease, border-left .3s ease;
 
-  &__message {
-    color: $item-text-color;
+  &__title {
+    font-weight: normal;
+    font-size: $base-font-size;
+    margin-bottom: .4rem;
   }
 
-  &__status-message {
-    color: $item-text-color;
-    font-style: italic;
-    text-align: center;
+  &__subtitle {
+    color: $dark-grey;
     margin: 0;
+  }
+
+  &:hover {
+    background-color: $light-grey;
+    border-left: $item-border-width solid $grey;
+  }
+
+  &--selected, &--selected:hover {
+    background-color: $light-grey;
+    border-left: $item-border-width solid $brand-primary;
+
+    .item__title {
+      font-weight: bold;
+    }
   }
 }

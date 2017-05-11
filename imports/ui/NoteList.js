@@ -24,7 +24,6 @@ export const NoteList = (props) => {
         <div className="item-list">
             <NoteListHeader/>
             {renderNotes(props.notes)}
-            Notes {props.notes.length}
         </div>
     );
 };
