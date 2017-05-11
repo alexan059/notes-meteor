@@ -22,7 +22,7 @@ export const NoteListHeader = (props) => {
 
 NoteListHeader.propTypes = {
     meteorCall: React.PropTypes.func.isRequired,
-    Session: React.PropTypes.func.isRequired
+    Session: React.PropTypes.object.isRequired
 };
 
 export default createContainer(() => {
