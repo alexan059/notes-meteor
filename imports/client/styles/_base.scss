@@ -9,7 +9,7 @@ html {
 }
 
 body {
-  font-family: Helvetica, Arial, sans-serif;
+  font-family: $body-default-font-family;
   font-size: $base-font-size;
   background-color: $body-background-color;
   color: $body-default-color;
@@ -35,9 +35,12 @@ a {
 
 input[type="text"],
 input[type="email"],
-input[type="password"] {
+input[type="password"],
+textarea {
+  font-family: $body-default-font-family;
   font-size: $base-font-size;
   margin-bottom: $space;
   padding: $input-spacing;
   border: 1px solid $input-border;
+  color: $body-default-color;
 }
